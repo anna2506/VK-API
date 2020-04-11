@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background: #edeef0;
+}
+.top{
+    background: #4a76a8;
+    text-align: center;
+    font-family: sans-serif;
+    color: white;
+}
+.buttons{
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    background: #edeef0;
+}
+
+.login, .logout, .friends{
+    background: none;
+    border: 3px solid #4a76a8;
+    font-weight: bold;
+    width: 100px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 15px;
+    margin: 10px;
+}
+
+.buttons > button:hover{
+    translation-deration: 0.3s;
+    background-color: #4a76a8;
+    color: white;
+}
