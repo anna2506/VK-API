@@ -31,6 +31,18 @@ document.getElementById('vkLogin').onclick = function(){
         else if(response.status === 'unknown '){
             console.log("You need to register in Vkontakte");
         }
+        console.log("debug");
+        console.log(response.session.user);
+        var hi = document.getElementById('hello');
+        var hey = document.createElement('span');
+        hey.style.textAlign = "center";
+        hey.style.fontWeight = "bold";
+        hey.style.fontSize = "20pt";
+        hey.innerHTML = "Добро пожаловать, " + response.session.user.first_name + " " + response.session.user.last_name + "!";
+        if(hi.childElementCount != 0){
+            hi.removeChild(hi.firstElementChild);
+        }
+        hi.appendChild(hey);
 
     }, VK.access.FRIENDS)
 
