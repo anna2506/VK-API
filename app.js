@@ -93,8 +93,11 @@ function getFriend() {
                 var arr = [];
                 for(let i = 0; i < r.response.items.length; i++){
                     friend = r.response.items[i];
-                    list = friend.first_name + " " + friend.last_name;
-                    arr.push(list);
+                    VK.Api.call('users.get', {user_ids: friend, v:"5.73"}, function(resp){
+                        console.log(resp);
+                        list = resp.response.user.first_name + " " + resp.response.user.last_name;
+                        arr.push(list);
+                    });
                 }
                 for(let i = 0; i < arr.length; i++){
                     var li = document.createElement('li');
