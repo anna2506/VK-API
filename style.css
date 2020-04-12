@@ -18,7 +18,7 @@ body{
     background: #edeef0;
 }
 
-.login, .logout, .friends{
+.login, .logout{
     background: none;
     border: 3px solid #4a76a8;
     font-weight: bold;

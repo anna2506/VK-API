@@ -40,15 +40,14 @@ document.getElementById('vkLogin').onclick = function(){
         localStorage.name = response.session.user.first_name;
         localStorage.surname = response.session.user.last_name;
         name();
-        getFriend();
-
-
+        setTimeout(getFriend(), 1000);
     }, VK.access.FRIENDS);
 
-    if(localStorage.id){
-    }
-
 };
+
+/*document.getElementById('vkLogin').onclick = function(){
+    getFriend();
+};*/
 
 function name() {
     if(localStorage.name && localStorage.surname){
@@ -58,6 +57,8 @@ function name() {
         hey.style.justifyContent = "center";
         hey.style.fontWeight = "bold";
         hey.style.fontSize = "20pt";
+        hey.style.margin = "15px";
+        hey.style.color = "#4a76a8";
         hey.innerHTML = "Добро пожаловать, " + localStorage.name + " " + localStorage.surname + "!";
         if(hi){
             while (hi.firstElementChild){
@@ -68,10 +69,9 @@ function name() {
     }
 }
 
-function getFriend() {
-    if(localStorage.id){
-        VK.Api.call('friends.get',
-            {user_ids: localStorage.id,
+    if(localStorage.name && localStorage.surname){
+        VK.Api.call('friends.search',
+            {user_id: localStorage.id,
                 count: 5,
                 v:"5.73"},
             function(r) {
@@ -83,7 +83,9 @@ function getFriend() {
                 li1.style.textAlign = "center";
                 li1.style.fontWeight = "bold";
                 li1.style.fontSize = "20pt";
-                li1.innerHTML = "Ваши друзья";
+                li1.style.color = "#4a76a8";
+                li1.style.margin = "5px";
+                li1.innerHTML = "Ваши друзья:";
                 if (ul){
                     while (ul.firstElementChild){
                         ul.removeChild(ul.firstElementChild);
@@ -93,15 +95,24 @@ function getFriend() {
                 var arr = [];
                 for(let i = 0; i < r.response.items.length; i++){
                     friend = r.response.items[i];
-                    VK.Api.call('users.get', {user_ids: friend, v:"5.73"}, function(resp){
-                        console.log(resp);
-                        list = resp.response.user.first_name + " " + resp.response.user.last_name;
+                    console.log('friend');
+                    list = friend.first_name + " " + friend.last_name;
+                    console.log(list);
+                    arr.push(list);
+                    /*VK.Api.call('users.get', {user_ids: friend, v:"5.73"}, function(resp){
+
+                        console.log('name');
+                        console.log(resp.response[0].first_name);
+                        list = resp.response[0].first_name + " " + resp.response[0].last_name;
                         arr.push(list);
-                    });
+                    });*/
                 }
                 for(let i = 0; i < arr.length; i++){
                     var li = document.createElement('li');
                     li.innerHTML = arr[i];
+                    li.style.textAlign = "center";
+                    li.style.fontWeight = "bold";
+                    li.style.fontSize = "16pt";
                     ul.appendChild(li);
 
                 }
@@ -109,10 +120,8 @@ function getFriend() {
                 console.log('friends');
             });
     }
-}
 
 name();
-getFriend();
 
 document.getElementById('vkLogout').onclick = function(){
     console.log("logout");
