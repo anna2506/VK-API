@@ -5,28 +5,44 @@ function ready(){
 document.addEventListener("DomContentLoader", ready());
 VK.init({apiId:7403845});
 
-if (localStorage.id === undefined || localStorage.id === ''){
+if (!localStorage.id){
     document.getElementById('vkLogout').hidden = true;
-    //document.getElementById('friendsList').hidden = true;
-    //document.getElementById('hello').hidden = true;
 }
 else{
     document.getElementById('vkLogin').hidden = true;
 }
 
 
+
 document.getElementById('vkLogin').onclick = function(){
     console.log("login");
+    login();
+
+    /*const p = new Promise((resolve) => {
+        login();
+        resolve();
+    });
+    p.then(() => getFriends());
+    let promise = new Promise(login);
+    promise.then(getFriends());*/
+    console.log("friends");
+}
+
+function login(){
     VK.Auth.login(function (response) {
         console.log(response);
         if(response.status === 'connected'){
             localStorage.id = response.session.user.id;
-            console.log('yes');document.getElementById('vkLogin').hidden = true;
+            console.log('yes');
+            document.getElementById('vkLogin').hidden = true;
             document.getElementById('vkLogout').hidden = false;
-            //document.getElementById('vkFriends').hidden = false;
-            //document.getElementById('friendsList').hidden = false;
-            //document.getElementById('hello').hidden = false;
-
+            console.log("debug");
+            console.log(response.session.user);
+            /* сохраняем имя и фамилию пользователя*/
+            localStorage.name = response.session.user.first_name;
+            localStorage.surname = response.session.user.last_name;
+            name();
+            getFriends();
         }
         else if(response.status === 'not_authorized '){
             console.log("You need to allow the application to use your private data");
@@ -34,23 +50,15 @@ document.getElementById('vkLogin').onclick = function(){
         else if(response.status === 'unknown '){
             console.log("You need to register in Vkontakte");
         }
-        console.log("debug");
-        console.log(response.session.user);
-        /* сохраняем имя и фамилию пользователя*/
-        localStorage.name = response.session.user.first_name;
-        localStorage.surname = response.session.user.last_name;
-        name();
-        setTimeout(getFriend(), 1000);
+
+
     }, VK.access.FRIENDS);
+}
 
-};
-
-/*document.getElementById('vkLogin').onclick = function(){
-    getFriend();
-};*/
 
 function name() {
     if(localStorage.name && localStorage.surname){
+        console.log("name");
         var hi = document.getElementById('hello');
         var hey = document.createElement('span');
         hey.style.display = "flex";
@@ -68,14 +76,17 @@ function name() {
         hi.appendChild(hey);
     }
 }
-
-    if(localStorage.name && localStorage.surname){
-        VK.Api.call('friends.search',
-            {user_id: localStorage.id,
+function getFriends() {
+    if (localStorage.name && localStorage.surname) {
+        console.log("getFriends function");
+        VK.Api.call('friends.get',
+            {
+                user_id: localStorage.id,
                 count: 5,
-                v:"5.73"},
-            function(r) {
-            console.log(r);
+                v: "5.73"
+            },
+            function (r) {
+                console.log(r);
                 var div = document.getElementById('friends');
                 var ul = document.getElementById('friendsList');
                 var li1 = document.createElement('li');
@@ -86,28 +97,37 @@ function name() {
                 li1.style.color = "#4a76a8";
                 li1.style.margin = "5px";
                 li1.innerHTML = "Ваши друзья:";
-                if (ul){
-                    while (ul.firstElementChild){
+                if (ul) {
+                    while (ul.firstElementChild) {
                         ul.removeChild(ul.firstElementChild);
                     }
                     ul.appendChild(li1);
                 }
                 var arr = [];
-                for(let i = 0; i < r.response.items.length; i++){
+                for (let i = 0; i < r.response.items.length; i++) {
                     friend = r.response.items[i];
                     console.log('friend');
-                    list = friend.first_name + " " + friend.last_name;
+                    /*list = friend.first_name + " " + friend.last_name;
                     console.log(list);
-                    arr.push(list);
-                    /*VK.Api.call('users.get', {user_ids: friend, v:"5.73"}, function(resp){
-
+                    arr.push(list);*/
+                    VK.Api.call('users.get', {user_ids: friend, v:"5.73"}, function(resp){
                         console.log('name');
+                        console.log(resp);
                         console.log(resp.response[0].first_name);
-                        list = resp.response[0].first_name + " " + resp.response[0].last_name;
+                        let list = resp.response[0].first_name + " " + resp.response[0].last_name;
+                        var li = document.createElement('li');
+                        li.innerHTML = list;
+                        li.style.textAlign = "center";
+                        li.style.fontWeight = "bold";
+                        li.style.fontSize = "16pt";
+                        ul.appendChild(li);
                         arr.push(list);
-                    });*/
+                    });
                 }
-                for(let i = 0; i < arr.length; i++){
+                console.log(arr);
+                for (let i = 0; i < arr.length; i++) {
+                    console.log("array: ", 1);
+                    console.log(arr[i]);
                     var li = document.createElement('li');
                     li.innerHTML = arr[i];
                     li.style.textAlign = "center";
@@ -120,8 +140,13 @@ function name() {
                 console.log('friends');
             });
     }
+}
 
-name();
+function onPageLoad() {
+    name();
+    getFriends();
+}
+onPageLoad();
 
 document.getElementById('vkLogout').onclick = function(){
     console.log("logout");
@@ -142,8 +167,10 @@ document.getElementById('vkLogout').onclick = function(){
         localStorage.name = '';
         localStorage.surname = '';
         var ul = document.getElementById('friendsList');
-        while (ul.firstElementChild){
-            ul.removeChild(ul.firstChild);
+        if(ul){
+            while (ul.firstElementChild){
+                ul.removeChild(ul.firstChild);
+            }
         }
     });
 
