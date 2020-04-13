@@ -121,8 +121,10 @@ function getFriends() {
                         li.style.textAlign = "center";
                         li.style.fontWeight = "bold";
                         li.style.fontSize = "16pt";
-                        ul.appendChild(li);
-                        arr.push(list);
+                        if(li){
+                            ul.appendChild(li);
+                            arr.push(list);
+                        }
                         console.log(list);
                         console.log(arr);
                         localStorage.setItem("friends", JSON.stringify(arr));
@@ -141,7 +143,10 @@ function getFriends() {
                     li.style.textAlign = "center";
                     li.style.fontWeight = "bold";
                     li.style.fontSize = "16pt";
-                    ul.appendChild(li);
+                    if(li){
+                        ul.appendChild(li);
+                    }
+
 
                 }
                 div.appendChild(ul);
@@ -162,6 +167,20 @@ function onLoadFriends(){
         console.log(array);
         var div = document.getElementById('friends');
         var ul = document.getElementById('friendsList');
+        var li1 = document.createElement('li');
+        div.style.justifyContent = "center";
+        li1.style.textAlign = "center";
+        li1.style.fontWeight = "bold";
+        li1.style.fontSize = "20pt";
+        li1.style.color = "#4a76a8";
+        li1.style.margin = "5px";
+        li1.innerHTML = "Ваши друзья:";
+        if (ul) {
+            while (ul.firstElementChild) {
+                ul.removeChild(ul.firstElementChild);
+            }
+            ul.appendChild(li1);
+        }
         for(let i = 0; i < array.length; i++){
             var li = document.createElement('li');
             li.innerHTML = array[i];
@@ -173,6 +192,9 @@ function onLoadFriends(){
         div.appendChild(ul);
         console.log("same friends");
     }
+    else{
+        getFriends();
+    }
 }
 
 document.getElementById('vkLogout').onclick = function(){
@@ -182,10 +204,6 @@ document.getElementById('vkLogout').onclick = function(){
         document.getElementById('vkLogin').hidden = false;
         document.getElementById('vkLogout').hidden = true;
         //document.getElementById('friendsList').hidden = true;
-        var friends = document.getElementById('friends');
-        while(friends.firstElementChild){
-            friends.removeChild(friends.firstElementChild);
-        }
         var hi = document.getElementById('hello');
         while (hi.firstElementChild){
             hi.removeChild(hi.firstElementChild);
@@ -193,6 +211,7 @@ document.getElementById('vkLogout').onclick = function(){
         localStorage.id = '';
         localStorage.name = '';
         localStorage.surname = '';
+        localStorage.removeItem("friends");
         var ul = document.getElementById('friendsList');
         if(ul){
             while (ul.firstElementChild){
