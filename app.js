@@ -83,6 +83,7 @@ function getFriends() {
             {
                 user_id: localStorage.id,
                 count: 5,
+                order: "random",
                 v: "5.73"
             },
             function (r) {
@@ -122,9 +123,16 @@ function getFriends() {
                         li.style.fontSize = "16pt";
                         ul.appendChild(li);
                         arr.push(list);
+                        console.log(list);
+                        console.log(arr);
+                        localStorage.setItem("friends", JSON.stringify(arr));
+                        console.log(localStorage.getItem("friends"));
                     });
+                    console.log(arr);
+                    localStorage.setItem("friends", JSON.stringify(arr));
+                    console.log(localStorage.getItem("friends"));
                 }
-                console.log(arr);
+
                 for (let i = 0; i < arr.length; i++) {
                     console.log("array: ", 1);
                     console.log(arr[i]);
@@ -144,9 +152,28 @@ function getFriends() {
 
 function onPageLoad() {
     name();
-    getFriends();
+    onLoadFriends();
 }
 onPageLoad();
+
+function onLoadFriends(){
+    if(localStorage.getItem("friends")){
+        var array = JSON.parse(localStorage.getItem("friends"));
+        console.log(array);
+        var div = document.getElementById('friends');
+        var ul = document.getElementById('friendsList');
+        for(let i = 0; i < array.length; i++){
+            var li = document.createElement('li');
+            li.innerHTML = array[i];
+            li.style.textAlign = "center";
+            li.style.fontWeight = "bold";
+            li.style.fontSize = "16pt";
+            ul.appendChild(li);
+        }
+        div.appendChild(ul);
+        console.log("same friends");
+    }
+}
 
 document.getElementById('vkLogout').onclick = function(){
     console.log("logout");
