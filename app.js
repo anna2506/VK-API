@@ -96,6 +96,7 @@ function getFriends() {
                         li.style.textAlign = "center";
                         li.style.fontWeight = "bold";
                         li.style.fontSize = "16pt";
+                        li.style.margin = "3px";
                         if(li){
                             ul.appendChild(li);
                             arr.push(list);
@@ -138,6 +139,7 @@ function onLoadFriends(){
             li.style.textAlign = "center";
             li.style.fontWeight = "bold";
             li.style.fontSize = "16pt";
+            li.style.margin = "3px";
             ul.appendChild(li);
         }
         div.appendChild(ul);
