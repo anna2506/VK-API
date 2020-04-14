@@ -18,15 +18,17 @@ body{
     background: #edeef0;
 }
 
+
 .login, .logout{
     background: none;
     border: 3px solid #4a76a8;
     font-weight: bold;
-    width: 120px;
-    height: 40px;
+    width: 150px;
+    height: 50px;
     cursor: pointer;
     border-radius: 15px;
     margin: 10px;
+    font-size: 12pt;
 }
 
 .buttons > button:hover{
